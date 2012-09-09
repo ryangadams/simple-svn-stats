@@ -21,7 +21,7 @@ module Jiraissues
           :summary => item['summary'][0],
           :status => item['status'][0]['content'],
           :rag => fetch_rag(item['customfields'][0]['customfield']),
-          :jiraurl => fetch_jira_url(item['customfields'][0]['customfield']),
+          :jiraurl => item['link'][0],
           :confluenceurl => fetch_confluence_url(item['customfields'][0]['customfield']),
           :tpm => fetch_tpm(item['customfields'][0]['customfield']),
           :laststatus => fetch_last_status(item['customfields'][0]['customfield']),

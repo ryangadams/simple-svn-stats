@@ -20,7 +20,8 @@ def show_jira_header(jira_id)
 	jira_detail = Jiraissues.fetch_issue($config_data, jira_id)
 	puts "\n\n" + 
 		jira_detail[:keys][0][:key] + " - " + 
-		jira_detail[:keys][0][:summary] + " - " + jira_detail[:keys][0][:status] + 
+		jira_detail[:keys][0][:summary] + " - \033[4m" + jira_detail[:keys][0][:status] + "\033[0m" +
+		"\n\033[32m" + jira_detail[:keys][0][:jiraurl] + "\033[0m " +
 		"\n------------"
 end                                                                                                                  
 
