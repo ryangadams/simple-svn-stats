@@ -1,0 +1,4 @@
+SVNURL: "https://repo.dev.bbc.co.uk/pal/knowlearn/"
+JIRASPACE: "UNIFIEDPLACE"
+PERSONAL_PEM: "/Users/ryan/certstore/ryan_adams_pwless.pem"
+CA_PEM: "/Users/ryan/certstore/ca.pem"
