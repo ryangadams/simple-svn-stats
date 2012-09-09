@@ -61,19 +61,22 @@ end
 now = Date.today
 last_week = (now - 7)
                                    
-options = Hash.new(0)
+options = Hash.new(0) 
+options[:log] = $config_data["SVNURL"]
+
 $author = nil
 
 OptionParser.new do |o|
   o.on('-a AUTHOR', "Show only changes by the specified author") { |author| $author = author }        
 	o.on('-j', "Group by jira ticket number (shows summary)") { |jira| options[:byjira] = 1 }
+	o.on('-l SVN LOCATION', "get the log from this location") { |log| options[:log] = log }
 	o.on('-s', "Silent") {|s| $silent = s }
   o.on('-h') { puts o; exit }
   o.parse!
 end
                                                    
 
-log_list = Svnlog.fetchlog($config_data, last_week)
+log_list = Svnlog.fetchlog(options[:log], last_week, $config_data)
       
 puts "\nCommits by Author"
 commits_by_author(log_list [:keys]).each {|author, count| puts author + " : " + count.to_s }

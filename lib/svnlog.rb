@@ -1,18 +1,18 @@
 require 'xmlsimple'
 require 'date'
 module Svnlog
-    def Svnlog.fetchlog(config_hash, from_date)
+    def Svnlog.fetchlog(logurl, from_date, config_hash)
 
       command = "svn log --xml"
 
-      puts "getting svn log #{config_hash['SVNURL']} from #{from_date}\n " unless $silent
-			
-			if File.exists?("svnurl.xml") && (Time.now - File.mtime("svnurl.xml") < 300) # five minutes
-				puts "Reading Cached File (#{Time.now - File.mtime("svnurl.xml")})" unless $silent
-				xml_feed = File.read('svnurl.xml')
+      puts "getting svn log #{logurl} from #{from_date}\n " unless $silent
+			cached_log = logurl.tr(":/.", "")
+			if File.exists?("#{cached_log}.xml") && (Time.now - File.mtime("#{cached_log}.xml") < 300) # five minutes
+				puts "Reading Cached File (#{(Time.now - File.mtime("#{cached_log}.xml")).to_i} seconds old)" unless $silent
+				xml_feed = File.read("#{cached_log}.xml")
 			else
-				xml_feed = %x{#{command} #{config_hash['SVNURL']}}
-				File.open("svnurl.xml", "w") { |f| f.write(xml_feed) }
+				xml_feed = %x{#{command} #{logurl}}
+				File.open("#{cached_log}.xml", "w") { |f| f.write(xml_feed) }
 			end
       
       xml_obj = XmlSimple.xml_in(xml_feed)
