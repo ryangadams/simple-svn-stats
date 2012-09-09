@@ -39,4 +39,14 @@ module Svnlog
       {:keys => keys, :url => config_hash['SVNURL']}
 
     end
+
+		def count_commits_by_author(logitems)
+			authors = Hash.new(0)
+			logitems.each do | item |
+				authors[item[:author]] = authors[item[:author]] + 1
+			end                                              
+			authors.sort_by { |author, count| -count }
+		end
+		
+		module_function :count_commits_by_author 
 end
