@@ -2,14 +2,13 @@ require 'pathname'
 $:.unshift File.join(File.dirname(Pathname.new($0).realpath.to_s), 'lib')
 require 'optparse'
 require 'date'
-require 'json'
 require 'yaml'
 require 'svnlog'
 require 'jiraissues'
 
 $config_data = YAML.load_file  ('config.yaml') 
                                
-def commits_by_author(logitems)
+def count_commits_by_author(logitems)
 	authors = Hash.new(0)
 	logitems.each do | item |
 		authors[item[:author]] = authors[item[:author]] + 1
@@ -63,22 +62,24 @@ last_week = (now - 7)
                                    
 options = Hash.new(0) 
 options[:log] = $config_data["SVNURL"]
-
+options[:date] = last_week
 $author = nil
 
 OptionParser.new do |o|
   o.on('-a AUTHOR', "Show only changes by the specified author") { |author| $author = author }        
 	o.on('-j', "Group by jira ticket number (shows summary)") { |jira| options[:byjira] = 1 }
 	o.on('-l SVN LOCATION', "get the log from this location") { |log| options[:log] = log }
+	o.on('-d date', "Get commits since this date (must be Date.parse-able, defaults to last week)") {
+		|date| options[:date] = Date.parse(date) }
 	o.on('-s', "Silent") {|s| $silent = s }
   o.on('-h') { puts o; exit }
   o.parse!
 end
-                                                   
+       
 
-log_list = Svnlog.fetchlog(options[:log], last_week, $config_data)
+log_list = Svnlog.fetchlog(options[:log], options[:date], $config_data)
       
-puts "\nCommits by Author"
-commits_by_author(log_list [:keys]).each {|author, count| puts author + " : " + count.to_s }
-                                      
+puts "\nCommits by Author in this period"
+count_commits_by_author(log_list [:keys]).each {|author, count| puts author + " : " + count.to_s }
+
 print_pretty_history(log_list, $author, options[:byjira]) 
