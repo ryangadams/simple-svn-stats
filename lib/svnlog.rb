@@ -28,7 +28,7 @@ module Svnlog
 				
         message = {
           :key => item['revision'],
-          :summary => item['msg'][0],
+          :summary => (item['msg'][0].is_a?(Hash) ? "No Summary Provided": item["msg"][0]),
 					:author => item['author'][0].match(/CN=([^\/]*)\//)[1],
 					:date => item['date'][0],
 					:jira => jira
