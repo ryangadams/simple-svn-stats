@@ -59,7 +59,7 @@ module Consolef
 		puts "Name".ljust(20) + " | " + "Count" + " | " +" Last Commit"
 		Svnlog.count_commits_by_author(log_list[:keys]).each {|author, stat| 
 		  puts author.ljust(20) + " | " + stat[:count].to_s.ljust(5)  + " | " +
-		  "\033[36m" + DateTime.parse(stat[:last_commit]).strftime("%d/%m") + "\033[0m"
+		  "\033[36m" + DateTime.parse(stat[:last_commit]).strftime("%d/%m/%Y") + "\033[0m"
 	  }
 	end
 	
