@@ -1,8 +1,10 @@
 require 'xmlsimple'
 require 'date'
 module Svnlog
-    def Svnlog.fetchlog(logurl, from_date, config_hash)
-
+    def Svnlog.fetchlog(options, config_hash)
+      logurl = options[:log]
+      from_date = options[:date]
+      project = options[:project]
       command = "svn log --xml"
 
       puts "getting svn log #{logurl} from #{from_date}\n " unless $silent
@@ -21,7 +23,7 @@ module Svnlog
 			keys = Array.new
       xml_obj['logentry'].each do |item|
 	      begin
-					jira = item['msg'][0].match(/(#{config_hash['JIRASPACE']}-[0-9]+)/)[1]
+					jira = item['msg'][0].match(/(#{project}-[0-9]+)/)[1]
 				rescue
 					jira = ""
 				end

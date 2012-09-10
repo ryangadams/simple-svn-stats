@@ -17,6 +17,7 @@ options = Hash.new(0)
 # some defaults
 options[:log] = $config_data["SVNURL"]
 options[:date] = (Date.today - 7)
+options[:project] = $config_data["JIRASPACE"]
 $author = nil
 
 OptionParser.new do |o|
@@ -26,6 +27,7 @@ OptionParser.new do |o|
   }
   o.on('-b', "Just the author stats (be brief)") { |brief| options[:be_brief] = 1 }
 	o.on('-j', "Group by jira ticket number (shows summary)") { |jira| options[:by_jira] = 1 }
+	o.on('-p PROJECT', "expect jira references to be for PROJECT") { |project| options[:project] = project }
 	o.on('-l SVN LOCATION', "get the log from this location") { |log| options[:log] = log }
 	o.on('-d date', "Get commits since this date (must be Date.parse-able, defaults to last week, use 'all' to see the whole log)") { |date| 
 	  options[:date] = Date.parse(date) unless date == 'all'
@@ -37,7 +39,7 @@ OptionParser.new do |o|
 end
        
 # fetch the log entries
-log_list = Svnlog.fetchlog(options[:log], options[:date], $config_data)
+log_list = Svnlog.fetchlog(options, $config_data)
       
 # print some stats
 print_author_stats(log_list)
