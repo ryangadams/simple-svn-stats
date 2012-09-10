@@ -26,8 +26,10 @@ OptionParser.new do |o|
   }
 	o.on('-j', "Group by jira ticket number (shows summary)") { |jira| options[:by_jira] = 1 }
 	o.on('-l SVN LOCATION', "get the log from this location") { |log| options[:log] = log }
-	o.on('-d date', "Get commits since this date (must be Date.parse-able, defaults to last week)") {
-		|date| options[:date] = Date.parse(date) }
+	o.on('-d date', "Get commits since this date (must be Date.parse-able, defaults to last week, use 'all' to see the whole log)") { |date| 
+	  options[:date] = Date.parse(date) unless date == 'all'
+	  options[:date] = Date.parse("2000-01-01") if date == 'all'
+	}
 	o.on('-s', "Silent") {|s| $silent = s }
   o.on('-h') { puts o; exit }
   o.parse!
@@ -38,4 +40,4 @@ log_list = Svnlog.fetchlog(options[:log], options[:date], $config_data)
       
 # print some stats
 print_author_stats(log_list)
-print_pretty_history(log_list, $author, options[:byjira]) 
+print_pretty_history(log_list, $author, options) 
