@@ -10,7 +10,10 @@ module Jiraissues
 
       puts "getting url #{issue_list_xml_url} \n " if $debug
 
+      puts "#{command} #{issue_list_xml_url}" if $debug
       xml_feed = %x{#{command} #{issue_list_xml_url}}
+
+      
       xml_obj = XmlSimple.xml_in(xml_feed)
       #xml_obj = XmlSimple.xml_in('data/pipeline.xml')
 
