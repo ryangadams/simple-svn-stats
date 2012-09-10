@@ -41,11 +41,18 @@ module Svnlog
     end
 
 		def count_commits_by_author(logitems)
-			authors = Hash.new(0)
+			authors = Hash.new()
 			logitems.each do | item |
-				authors[item[:author]] = authors[item[:author]] + 1
+			  this_author = item[:author]
+			  unless authors[this_author].is_a?(Hash)
+			    authors[this_author] = Hash.new(0)
+		    end
+				authors[this_author][:count] = authors[this_author][:count] + 1
+				if authors[this_author][:last_commit] == 0 || authors[this_author][:last_commit] < item[:date]
+				  authors[this_author][:last_commit] = item[:date]
+			  end
 			end                                              
-			authors.sort_by { |author, count| -count }
+			authors.sort_by { |author, stat| -stat[:count] }
 		end
 		
 		module_function :count_commits_by_author 
