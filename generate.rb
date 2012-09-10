@@ -20,8 +20,11 @@ options[:date] = (Date.today - 7)
 $author = nil
 
 OptionParser.new do |o|
-  o.on('-a AUTHOR', "Show only changes by the specified author") { |author| $author = author }        
-	o.on('-j', "Group by jira ticket number (shows summary)") { |jira| options[:byjira] = 1 }
+  o.on('-a [AUTHOR]', "Show only changes by the specified author") { |author| 
+    options[:by_author] = 1
+    $author = author 
+  }
+	o.on('-j', "Group by jira ticket number (shows summary)") { |jira| options[:by_jira] = 1 }
 	o.on('-l SVN LOCATION', "get the log from this location") { |log| options[:log] = log }
 	o.on('-d date', "Get commits since this date (must be Date.parse-able, defaults to last week)") {
 		|date| options[:date] = Date.parse(date) }
