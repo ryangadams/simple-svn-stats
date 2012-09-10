@@ -14,6 +14,7 @@ module Consolef
   end
   
 	def print_log(logitem, include_author)
+	  "r" + logitem[:key] + " - " + 
 	  DateTime.parse(logitem[:date]).strftime("%d/%m/%Y %H:%M") + 
 			" - " + logitem[:summary].gsub(/\n/, " ") +
 			(include_author ? " :: Author: " + logitem[:author] : "")
